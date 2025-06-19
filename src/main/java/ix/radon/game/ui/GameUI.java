@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandle;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GameUI {
@@ -13,33 +12,44 @@ public class GameUI {
             "nativeLibs/libartist.so";
     private final static Linker linker = Linker.nativeLinker();
 
+    private static MethodHandle loadArtistFunction(
+            Arena arena,
+            String functionName,
+            FunctionDescriptor functionDescriptor
+    ) throws NoSuchElementException {
+        SymbolLookup artistLookup = SymbolLookup.libraryLookup(
+                Path.of(ArtistLibraryPath),
+                arena
+        );
+
+        Optional<MemorySegment> optionalFunctionAddress =
+                artistLookup.find(functionName);
+
+        if (optionalFunctionAddress.isPresent()) {
+            MemorySegment functionAddress = optionalFunctionAddress.get();
+
+            return linker.downcallHandle(
+                    functionAddress,
+                    functionDescriptor
+            );
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
+
     public static void Start(Supplier<Void> f) throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
-            SymbolLookup artistLookup = SymbolLookup.libraryLookup(
-                    Path.of(ArtistLibraryPath),
-                    arena
+            MethodHandle startGame = loadArtistFunction(
+                    arena,
+                    "start_game",
+                    FunctionDescriptor.ofVoid()
             );
 
-            Optional<MemorySegment> optionalStartGameAddress =
-                    artistLookup.find("start_game");
+            startGame.invoke();
 
-            if (optionalStartGameAddress.isPresent()) {
-                MemorySegment startGameAddress = optionalStartGameAddress.get();
-                FunctionDescriptor startGameDescriptor = FunctionDescriptor.ofVoid();
+            f.get();
 
-                MethodHandle startGame = linker.downcallHandle(
-                        startGameAddress,
-                        startGameDescriptor
-                );
-
-                startGame.invoke();
-
-                f.get();
-
-                End();
-            } else {
-                throw new NoSuchElementException();
-            }
+            End();
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -47,27 +57,13 @@ public class GameUI {
 
     private static void End() throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
-            SymbolLookup artistLookup = SymbolLookup.libraryLookup(
-                    Path.of(ArtistLibraryPath),
-                    arena
+            MethodHandle endGame = loadArtistFunction(
+                    arena,
+                    "end_game",
+                    FunctionDescriptor.ofVoid()
             );
 
-            Optional<MemorySegment> optionalEndGameAddress =
-                    artistLookup.find("end_game");
-
-            if (optionalEndGameAddress.isPresent()) {
-                MemorySegment endGameAddress = optionalEndGameAddress.get();
-                FunctionDescriptor endGameDescriptor = FunctionDescriptor.ofVoid();
-
-                MethodHandle endGame = linker.downcallHandle(
-                        endGameAddress,
-                        endGameDescriptor
-                );
-
-                endGame.invoke();
-            } else {
-                throw new NoSuchElementException();
-            }
+            endGame.invoke();
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -75,48 +71,31 @@ public class GameUI {
 
     public static int[] terminalSize() throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
-            SymbolLookup artistLookup = SymbolLookup.libraryLookup(
-                    Path.of(ArtistLibraryPath),
-                    arena
+            MethodHandle getTerminalDimension = loadArtistFunction(
+                    arena,
+                    "get_terminal_dimension",
+                    FunctionDescriptor.of(ValueLayout.ADDRESS)
             );
 
-            Optional<MemorySegment> optionalGetTerminalDimensionAddress =
-                    artistLookup.find("get_terminal_dimension");
+            MemorySegment dimensionArraySegmentPtr =
+                    (MemorySegment) getTerminalDimension.invoke();
 
-            if (optionalGetTerminalDimensionAddress.isPresent()) {
-                MemorySegment getTerminalDimensionAddress =
-                        optionalGetTerminalDimensionAddress.get();
-                FunctionDescriptor getTerminalDimensionDescriptor = FunctionDescriptor.of(
-                        ValueLayout.ADDRESS
-                );
+            MemorySegment dimensionArraySegment =
+                    dimensionArraySegmentPtr.reinterpret(8, arena, null);
 
-                MethodHandle getTerminalDimension = linker.downcallHandle(
-                        getTerminalDimensionAddress,
-                        getTerminalDimensionDescriptor
-                );
+            int[] dimension = new int[2];
 
-                MemorySegment dimensionArraySegmentPtr =
-                        (MemorySegment) getTerminalDimension.invoke();
+            MemorySegment.copy(
+                    dimensionArraySegment,
+                    ValueLayout.JAVA_INT,
+                    0,
+                    MemorySegment.ofArray(dimension),
+                    ValueLayout.JAVA_INT,
+                    0,
+                    2
+            );
 
-                MemorySegment dimensionArraySegment =
-                        dimensionArraySegmentPtr.reinterpret(8, arena, null);
-
-                int[] dimension = new int[2];
-
-                MemorySegment.copy(
-                        dimensionArraySegment,
-                        ValueLayout.JAVA_INT,
-                        0,
-                        MemorySegment.ofArray(dimension),
-                        ValueLayout.JAVA_INT,
-                        0,
-                        2
-                );
-
-                return dimension;
-            } else {
-                throw new NoSuchElementException();
-            }
+            return dimension;
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
