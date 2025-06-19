@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandle;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GameUI {
@@ -35,6 +36,22 @@ public class GameUI {
         } else {
             throw new NoSuchElementException();
         }
+    }
+
+    private final static Consumer<MemorySegment> free() {
+        var free_addr = linker.defaultLookup().find("free").orElseThrow();
+        MethodHandle free = linker.downcallHandle(
+                free_addr,
+                FunctionDescriptor.ofVoid(ValueLayout.ADDRESS)
+        );
+
+        return s -> {
+            try {
+                free.invokeExact(s);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
 
     public static void Start(Supplier<Void> f) throws RuntimeException {
@@ -81,7 +98,7 @@ public class GameUI {
                     (MemorySegment) getTerminalDimension.invoke();
 
             MemorySegment dimensionArraySegment =
-                    dimensionArraySegmentPtr.reinterpret(8, arena, null);
+                    dimensionArraySegmentPtr.reinterpret(8, arena, free());
 
             int[] dimension = new int[2];
 
