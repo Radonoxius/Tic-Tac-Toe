@@ -1,5 +1,4 @@
 plugins {
-    id("application")
     id("java")
 }
 
@@ -8,16 +7,6 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-}
-
-application {
-    mainClass.set("ix.radon.game.Main")
-
-    applicationDefaultJvmArgs = listOf(
-        "-Xlint:preview",
-        "--enable-preview",
-        "--enable-native-access=ALL-UNNAMED"
-    )
 }
 
 java {
@@ -37,5 +26,4 @@ tasks.jar {
 }
 
 dependencies {
-
 }

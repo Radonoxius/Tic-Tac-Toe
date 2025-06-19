@@ -16,6 +16,11 @@ cd ../..
 
 cargo b --release
 
+cd C
+rm -rf build
+
+cd ..
+
 mv target/release/libartist.so ../../nativeLibs/libartist.so 2> /dev/null
 
-cargo clean 1> /dev/null
+cargo clean
