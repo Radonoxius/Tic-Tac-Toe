@@ -16,6 +16,6 @@ cd ../..
 
 cargo b --release
 
-mv target/release/libartist.so ../../src/main/resources/nativeLibs/libartist.so 2> /dev/null
+mv target/release/libartist.so ../../nativeLibs/libartist.so 2> /dev/null
 
-cargo clean
+cargo clean 1> /dev/null

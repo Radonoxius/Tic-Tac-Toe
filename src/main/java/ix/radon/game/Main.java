@@ -4,6 +4,8 @@ import ix.radon.game.logic.GameBoard;
 import ix.radon.game.logic.random.Coin;
 import ix.radon.game.ui.GameUI;
 
+import java.io.Console;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.concurrent.atomic.AtomicReference;
@@ -15,7 +17,6 @@ public class Main {
 
         GameUI.Start(() -> {
             int[] dimen = GameUI.terminalSize();
-            //System.out.println(Arrays.toString(dimen));
             return null;
         });
     }

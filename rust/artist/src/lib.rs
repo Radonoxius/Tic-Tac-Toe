@@ -4,9 +4,6 @@ use crate::ffi::{init, terminal_dimension, end};
 
 mod ffi;
 
-#[repr(C)]
-pub struct Engine {}
-
 #[unsafe(no_mangle)]
 pub extern "C" fn get_terminal_dimension() -> *const i32 {
     let mut dimen = ManuallyDrop::new(Box::new([0; 2]));

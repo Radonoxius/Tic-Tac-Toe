@@ -30,6 +30,12 @@ java {
     }
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "ix.radon.game.Main"
+    }
+}
+
 dependencies {
 
 }

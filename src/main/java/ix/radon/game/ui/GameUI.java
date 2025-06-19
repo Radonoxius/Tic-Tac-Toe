@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public class GameUI {
     private final static String ArtistLibraryPath =
-            "src/main/resources/nativeLibs/libartist.so";
+            "nativeLibs/libartist.so";
     private final static Linker linker = Linker.nativeLinker();
 
     public static void Start(Supplier<Void> f) throws RuntimeException {
