@@ -1,5 +1,10 @@
 #! /bin/bash
 
+cd rust/artist
+./build.sh
+
+cd ../..
+
 ./gradlew jar
 
 cp -r nativeLibs build/libs/nativeLibs 2> /dev/null

@@ -2,12 +2,15 @@
 
 void init() {
     initscr();
-    keypad(stdscr, TRUE);
     cbreak();
-    getch();
+    keypad(stdscr, TRUE);
+    curs_set(0);
+    refresh();
 }
 
 void end() {
+    refresh();
+    getch();
     endwin();
 }
 

@@ -1,15 +1,15 @@
 package ix.radon.game.logic;
 
+import ix.radon.game.ui.GameUI;
+
+import java.util.function.Supplier;
+
 public class GameBoard {
     static class GameBoardTile {
         private TileSymbol symbol;
-        private final byte xCoordinate;
-        private final byte yCoordinate;
 
-        GameBoardTile(byte x, byte y) {
+        GameBoardTile() {
             symbol = TileSymbol.BLANK;
-            xCoordinate = x;
-            yCoordinate = y;
         }
 
         void setSymbol(TileSymbol symbol) {
@@ -19,20 +19,18 @@ public class GameBoard {
         TileSymbol getSymbol() {
             return symbol;
         }
-
-        byte[] getCoordinates() {
-            return new byte[] { xCoordinate, yCoordinate };
-        }
     }
 
     private final GameBoardTile[][] tiles = new GameBoardTile[3][3];
 
-    public GameBoard() {
+    public GameBoard(Supplier<Void> f) {
         for (byte x = 0; x < 3; x++) {
             for (byte y = 0; y < 3; y++) {
-                tiles[x][y] = new GameBoardTile(x, y);
+                tiles[x][y] = new GameBoardTile();
             }
         }
+
+        GameUI.Start(f);
     }
 
     public void setTileSymbol(int x, int y, TileSymbol symbol) throws IndexOutOfBoundsException {

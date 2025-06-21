@@ -7,12 +7,16 @@ mkdir build 2> /dev/null
 
 cd build
 
-clang -O3 -c ../*.c
+clang -O3 -c ../init.c
 ar rcs libhelper.a *.o
 
 rm *.o
 
+clang -O3 ../window.c -lncurses -shared -o libwindow.so
+
 cd ../..
+
+mv C/build/libwindow.so ../../nativeLibs/libwindow.so 2> /dev/null
 
 cargo b --release
 
