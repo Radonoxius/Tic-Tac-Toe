@@ -22,6 +22,7 @@ public class GameUI {
 
             ScoreBoard.deleteBoards();
 
+            Thread.sleep(500);
             showExitWindow(arena);
             End();
         } catch (Throwable e) {
