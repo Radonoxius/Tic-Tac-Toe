@@ -1,7 +1,5 @@
 package ix.radon.game.ui;
 
-import ix.radon.game.ui.ffi.ArtistLibrary;
-
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.util.function.Supplier;
@@ -21,7 +19,6 @@ public class GameUI {
             f.get();
 
             ScoreBoard.deleteBoards();
-
             Thread.sleep(500);
             showExitWindow(arena);
             End();
@@ -35,8 +32,8 @@ public class GameUI {
                 arena,
                 26,
                 3,
-                (terminalSize().xSize - 26) / 2,
-                (terminalSize().ySize - 3) / 2
+                (terminalSize().xSize() - 26) / 2,
+                (terminalSize().ySize() - 3) / 2
         );
         exitWindow.createBorder();
         exitWindow.printString(1, 1, " Press any key to exit. ");
@@ -88,15 +85,5 @@ public class GameUI {
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
-    }
-}
-
-class Terminal {
-    public final int xSize;
-    public final int ySize;
-
-    Terminal(int xSize, int ySize) {
-        this.xSize = xSize;
-        this.ySize = ySize;
     }
 }

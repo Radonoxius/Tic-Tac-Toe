@@ -1,15 +1,19 @@
 package ix.radon.game.ui;
 
-import ix.radon.game.ui.ffi.WindowLibrary;
-
 import java.lang.foreign.Arena;
 import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.lang.invoke.MethodHandle;
 
-public record Window(Arena arena, MemorySegment windowPtr) {
-    public static Window createWindow(Arena arena, int xSize, int ySize, int xStart, int yStart) throws Throwable {
+record Window(Arena arena, MemorySegment windowPtr) {
+    static Window createWindow(
+            Arena arena,
+            int xSize,
+            int ySize,
+            int xStart,
+            int yStart
+    ) throws Throwable {
         MethodHandle createWindow = WindowLibrary.loadFunction(
                 arena,
                 "create_window",
@@ -25,7 +29,7 @@ public record Window(Arena arena, MemorySegment windowPtr) {
         return new Window(arena, (MemorySegment) createWindow.invoke(xSize, ySize, xStart, yStart));
     }
 
-    public void createBorder() throws Throwable {
+    void createBorder() throws Throwable {
         MethodHandle createBorder = WindowLibrary.loadFunction(
                 arena,
                 "create_border",
@@ -35,7 +39,11 @@ public record Window(Arena arena, MemorySegment windowPtr) {
         createBorder.invoke(windowPtr);
     }
 
-    public void printString(int xStart, int yStart, String str) throws Throwable {
+    void printString(
+            int xStart,
+            int yStart,
+            String str
+    ) throws Throwable {
         MethodHandle printString = WindowLibrary.loadFunction(
                 arena,
                 "print_string",
@@ -57,7 +65,7 @@ public record Window(Arena arena, MemorySegment windowPtr) {
         );
     }
 
-    public void refresh() throws Throwable {
+    void refresh() throws Throwable {
         MethodHandle windowRefresh = WindowLibrary.loadFunction(
                 arena,
                 "window_refresh",
@@ -67,7 +75,7 @@ public record Window(Arena arena, MemorySegment windowPtr) {
         windowRefresh.invoke(windowPtr);
     }
 
-    public void delete() throws Throwable {
+    void delete() throws Throwable {
         MethodHandle deleteWindow = WindowLibrary.loadFunction(
                 arena,
                 "delete_window",

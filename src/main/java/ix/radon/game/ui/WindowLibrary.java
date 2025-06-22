@@ -1,6 +1,4 @@
-package ix.radon.game.ui.ffi;
-
-import ix.radon.game.ui.Window;
+package ix.radon.game.ui;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
@@ -9,12 +7,13 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class WindowLibrary {
-    private final static String WindowLibraryPath = "nativeLibs/libwindow.so";
+class WindowLibrary {
+    private final static String WindowLibraryPath =
+            "nativeLibs/libwindow.so";
 
     private final static Linker linker = Linker.nativeLinker();
 
-    public static MethodHandle loadFunction(
+    static MethodHandle loadFunction(
             Arena arena,
             String functionName,
             FunctionDescriptor functionDescriptor
@@ -39,7 +38,7 @@ public class WindowLibrary {
         }
     }
 
-    public static Consumer<MemorySegment> free() {
+    static Consumer<MemorySegment> free() {
         var free_addr = linker.defaultLookup().find("free").orElseThrow();
         MethodHandle free = linker.downcallHandle(
                 free_addr,

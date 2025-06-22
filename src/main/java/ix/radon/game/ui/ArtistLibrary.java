@@ -1,4 +1,4 @@
-package ix.radon.game.ui.ffi;
+package ix.radon.game.ui;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
@@ -7,12 +7,13 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class ArtistLibrary {
-    private final static String ArtistLibraryPath = "nativeLibs/libartist.so";
+class ArtistLibrary {
+    private final static String ArtistLibraryPath =
+            "nativeLibs/libartist.so";
 
     private final static Linker linker = Linker.nativeLinker();
 
-    public static MethodHandle loadFunction(
+    static MethodHandle loadFunction(
             Arena arena,
             String functionName,
             FunctionDescriptor functionDescriptor
@@ -37,7 +38,7 @@ public class ArtistLibrary {
         }
     }
 
-    public static Consumer<MemorySegment> free() {
+    static Consumer<MemorySegment> free() {
         var free_addr = linker.defaultLookup().find("free").orElseThrow();
         MethodHandle free = linker.downcallHandle(
                 free_addr,
