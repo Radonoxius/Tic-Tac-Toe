@@ -1,8 +1,7 @@
 package ix.radon.game.logic;
 
 import ix.radon.game.ui.GameUI;
-
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class GameBoard {
     static class GameBoardTile {
@@ -21,16 +20,18 @@ public class GameBoard {
         }
     }
 
-    private final GameBoardTile[][] tiles = new GameBoardTile[3][3];
+    private static final GameBoardTile[][] tiles = new GameBoardTile[3][3];
 
-    public GameBoard(Supplier<Void> f) {
+    private GameBoard() {
         for (byte x = 0; x < 3; x++) {
             for (byte y = 0; y < 3; y++) {
                 tiles[x][y] = new GameBoardTile();
             }
         }
+    }
 
-        GameUI.Start(f);
+    public static void init(Function<GameBoard, Void> f) {
+        GameUI.Start(f, new GameBoard());
     }
 
     public void setTileSymbol(int x, int y, TileSymbol symbol) throws IndexOutOfBoundsException {
@@ -47,4 +48,3 @@ public class GameBoard {
         return tiles[x][y].getSymbol();
     }
 }
-

@@ -1,11 +1,15 @@
 package ix.radon.game.ui;
 
+import ix.radon.game.logic.GameBoard;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class GameUI {
-    public static void Start(Supplier<Void> f) throws RuntimeException {
+    public static void Start(
+            Function<GameBoard, Void> f,
+            GameBoard board
+    ) throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
             MethodHandle startGame = ArtistLibrary.loadFunction(
                     arena,
@@ -16,7 +20,7 @@ public class GameUI {
             startGame.invoke();
             ScoreBoard.createBoards(arena);
 
-            f.get();
+            f.apply(board);
 
             ScoreBoard.deleteBoards();
             Thread.sleep(500);

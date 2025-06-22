@@ -1,13 +1,17 @@
 package ix.radon.game;
 
 import ix.radon.game.logic.GameBoard;
+import ix.radon.game.logic.TileSymbol;
 import ix.radon.game.ui.GameUI;
 import ix.radon.game.ui.ScoreBoard;
 
 public class Main {
     public static void main(String[] args) {
-        new GameBoard(() -> {
+        GameBoard.init(board -> {
             try {
+                board.setTileSymbol(0, 0, TileSymbol.X);
+                board.setTileSymbol(1, 1, TileSymbol.O);
+
                 Thread.sleep(2000);
                 ScoreBoard.incrementPlayerScore();
 
