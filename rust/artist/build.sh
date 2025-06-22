@@ -5,6 +5,8 @@ cd C
 mkdir build 2> /dev/null
 cd build
 
+echo '--- Compiling C and Rust ---'
+
 clang -O3 -c ../init.c
 ar rcs libhelper.a *.o
 

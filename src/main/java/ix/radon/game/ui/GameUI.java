@@ -35,19 +35,19 @@ public class GameUI {
     }
 
     private static void showExitWindow(Arena arena) throws Throwable {
-        Window exitWindow = Window.create(
-                arena,
-                26,
-                3,
-                (getTerminal().xSize() - 26) / 2,
-                (getTerminal().ySize() - 3) / 2
-        );
-
-        exitWindow
+        Window exitWindow = Window
+                .create(
+                        arena,
+                        26,
+                        3,
+                        (getTerminal().xSize() - 26) / 2,
+                        (getTerminal().ySize() - 3) / 2
+                )
                 .makeDefaultBorder()
                 .print(1, 1, " Press any key to exit. ")
-                .refresh()
-                .delete();
+                .refresh();
+
+        exitWindow.delete();
     }
 
     private static void End() throws RuntimeException {

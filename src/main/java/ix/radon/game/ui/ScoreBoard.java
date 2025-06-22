@@ -48,6 +48,11 @@ public class ScoreBoard {
         updatePlayerScoreWindow();
     }
 
+    //Provides the current score of the player
+    public static int getPlayerScore() {
+        return playerScore;
+    }
+
     static void updateComputerScoreWindow() throws Throwable {
         computerScoreWindow
                 .print(19, 1, String.valueOf(computerScore))
@@ -58,6 +63,11 @@ public class ScoreBoard {
     public static void incrementComputerScore() throws Throwable {
         computerScore += 1;
         updateComputerScoreWindow();
+    }
+
+    //Provides the current score of the computer
+    public static int getComputerScore() {
+        return computerScore;
     }
 
     static void deleteBoards() throws Throwable {
