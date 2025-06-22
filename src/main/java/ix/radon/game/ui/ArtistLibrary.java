@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+//Loads functions from the Rust library: libartist.so
 class ArtistLibrary {
     private final static String ArtistLibraryPath =
             "nativeLibs/libartist.so";

@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+//Loads functions from the C library: libwindow.so
 class WindowLibrary {
     private final static String WindowLibraryPath =
             "nativeLibs/libwindow.so";

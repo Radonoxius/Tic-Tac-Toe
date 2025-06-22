@@ -6,8 +6,9 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.lang.invoke.MethodHandle;
 
+//Represents a game-UI window
 record Window(Arena arena, MemorySegment windowPtr) {
-    static Window createWindow(
+    static Window create(
             Arena arena,
             int xSize,
             int ySize,
@@ -29,7 +30,7 @@ record Window(Arena arena, MemorySegment windowPtr) {
         return new Window(arena, (MemorySegment) createWindow.invoke(xSize, ySize, xStart, yStart));
     }
 
-    Window createBorder() throws Throwable {
+    Window makeDefaultBorder() throws Throwable {
         MethodHandle createBorder = WindowLibrary.loadFunction(
                 arena,
                 "create_border",
@@ -41,7 +42,7 @@ record Window(Arena arena, MemorySegment windowPtr) {
         return this;
     }
 
-    Window printString(
+    Window print(
             int xStart,
             int yStart,
             String str

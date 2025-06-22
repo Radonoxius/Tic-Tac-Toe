@@ -5,12 +5,15 @@ import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.util.function.Function;
 
+//Represents the Terminal UI of the game
 public class GameUI {
+    //Starts the game UI. Don't bother reading the code
     public static void Start(
             Function<GameBoard, Void> f,
             GameBoard board
     ) throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
+            //Arena is basically a pool of memory on RAM
             MethodHandle startGame = ArtistLibrary.loadFunction(
                     arena,
                     "start_game",
@@ -32,17 +35,17 @@ public class GameUI {
     }
 
     private static void showExitWindow(Arena arena) throws Throwable {
-        Window exitWindow = Window.createWindow(
+        Window exitWindow = Window.create(
                 arena,
                 26,
                 3,
-                (terminalSize().xSize() - 26) / 2,
-                (terminalSize().ySize() - 3) / 2
+                (getTerminal().xSize() - 26) / 2,
+                (getTerminal().ySize() - 3) / 2
         );
 
         exitWindow
-                .createBorder()
-                .printString(1, 1, " Press any key to exit. ")
+                .makeDefaultBorder()
+                .print(1, 1, " Press any key to exit. ")
                 .refresh()
                 .delete();
     }
@@ -61,7 +64,7 @@ public class GameUI {
         }
     }
 
-    static Terminal terminalSize() throws RuntimeException {
+    static Terminal getTerminal() throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
             MethodHandle getTerminalDimension = ArtistLibrary.loadFunction(
                     arena,
