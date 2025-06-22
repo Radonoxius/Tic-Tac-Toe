@@ -2,7 +2,6 @@ package ix.radon.game;
 
 import ix.radon.game.logic.GameBoard;
 import ix.radon.game.logic.TileSymbol;
-import ix.radon.game.ui.GameUI;
 import ix.radon.game.ui.ScoreBoard;
 
 public class Main {

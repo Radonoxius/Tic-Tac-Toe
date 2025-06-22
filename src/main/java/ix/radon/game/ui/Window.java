@@ -29,7 +29,7 @@ record Window(Arena arena, MemorySegment windowPtr) {
         return new Window(arena, (MemorySegment) createWindow.invoke(xSize, ySize, xStart, yStart));
     }
 
-    void createBorder() throws Throwable {
+    Window createBorder() throws Throwable {
         MethodHandle createBorder = WindowLibrary.loadFunction(
                 arena,
                 "create_border",
@@ -37,9 +37,11 @@ record Window(Arena arena, MemorySegment windowPtr) {
         );
 
         createBorder.invoke(windowPtr);
+
+        return this;
     }
 
-    void printString(
+    Window printString(
             int xStart,
             int yStart,
             String str
@@ -63,9 +65,11 @@ record Window(Arena arena, MemorySegment windowPtr) {
                 yStart,
                 strSegment
         );
+
+        return this;
     }
 
-    void refresh() throws Throwable {
+    Window refresh() throws Throwable {
         MethodHandle windowRefresh = WindowLibrary.loadFunction(
                 arena,
                 "window_refresh",
@@ -73,6 +77,8 @@ record Window(Arena arena, MemorySegment windowPtr) {
         );
 
         windowRefresh.invoke(windowPtr);
+
+        return this;
     }
 
     void delete() throws Throwable {

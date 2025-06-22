@@ -39,10 +39,12 @@ public class GameUI {
                 (terminalSize().xSize() - 26) / 2,
                 (terminalSize().ySize() - 3) / 2
         );
-        exitWindow.createBorder();
-        exitWindow.printString(1, 1, " Press any key to exit. ");
-        exitWindow.refresh();
-        exitWindow.delete();
+
+        exitWindow
+                .createBorder()
+                .printString(1, 1, " Press any key to exit. ")
+                .refresh()
+                .delete();
     }
 
     private static void End() throws RuntimeException {

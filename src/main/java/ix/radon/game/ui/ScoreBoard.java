@@ -18,9 +18,10 @@ public class ScoreBoard {
                 0
         );
 
-        playerScoreWindow.createBorder();
-        playerScoreWindow.printString(3, 1, "Player Score: 0");
-        playerScoreWindow.refresh();
+        playerScoreWindow
+                .createBorder()
+                .printString(3, 1, "Player Score: 0")
+                .refresh();
 
         computerScoreWindow = Window.createWindow(
                 arena,
@@ -30,14 +31,16 @@ public class ScoreBoard {
                 0
         );
 
-        computerScoreWindow.createBorder();
-        computerScoreWindow.printString(3, 1, "Computer Score: 0");
-        computerScoreWindow.refresh();
+        computerScoreWindow
+                .createBorder()
+                .printString(3, 1, "Computer Score: 0")
+                .refresh();
     }
 
     static void updatePlayerScoreWindow() throws Throwable {
-        playerScoreWindow.printString(17, 1, String.valueOf(playerScore));
-        playerScoreWindow.refresh();
+        playerScoreWindow
+                .printString(17, 1, String.valueOf(playerScore))
+                .refresh();
     }
 
     public static void incrementPlayerScore() throws Throwable {
@@ -46,8 +49,9 @@ public class ScoreBoard {
     }
 
     static void updateComputerScoreWindow() throws Throwable {
-        computerScoreWindow.printString(19, 1, String.valueOf(computerScore));
-        computerScoreWindow.refresh();
+        computerScoreWindow
+                .printString(19, 1, String.valueOf(computerScore))
+                .refresh();
     }
 
     public static void incrementComputerScore() throws Throwable {
