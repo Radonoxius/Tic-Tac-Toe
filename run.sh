@@ -2,7 +2,7 @@
 
 echo '--- Compiling Java ---'
 
-./gradlew jar
+./gradlew jar -q --console=plain
 
 cp -r nativeLibs build/libs/nativeLibs 2> /dev/null
 
@@ -10,7 +10,7 @@ cd build/libs
 
 echo '--- Starting the App! ---'
 
-java -jar --enable-preview --enable-native-access=ALL-UNNAMED tic-tac-toe-1.0-SNAPSHOT.jar
+java -jar --enable-native-access=ALL-UNNAMED tic-tac-toe-1.0-SNAPSHOT.jar
 
 rm -rf nativeLibs
 

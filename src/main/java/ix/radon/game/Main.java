@@ -10,7 +10,6 @@ public class Main {
          * write the code below. (Before calling GameBoard.init(f))
          */
 
-
         /* GameBoard.init(f) creates a GameBoard and
          * provides it to you. This function will also start the Game UI
          *

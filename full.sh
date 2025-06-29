@@ -2,7 +2,7 @@
 
 echo '--- Cleaning with Gradle ---'
 
-./gradlew clean
+./gradlew clean -q --console=plain
 
 cd rust/artist
 ./build.sh

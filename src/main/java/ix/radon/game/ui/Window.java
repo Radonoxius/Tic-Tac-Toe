@@ -33,11 +33,42 @@ record Window(Arena arena, MemorySegment windowPtr) {
     Window makeDefaultBorder() throws Throwable {
         MethodHandle createBorder = WindowLibrary.loadFunction(
                 arena,
-                "create_border",
+                "create_default_border",
                 FunctionDescriptor.ofVoid(ValueLayout.ADDRESS)
         );
 
         createBorder.invoke(windowPtr);
+
+        return this;
+    }
+
+    Window makeBorder(
+            char ls,
+            char rs,
+            char ts,
+            char bs,
+            char tl,
+            char tr,
+            char bl,
+            char br
+    ) throws Throwable {
+        MethodHandle createBorder = WindowLibrary.loadFunction(
+                arena,
+                "create_border",
+                FunctionDescriptor.ofVoid(
+                        ValueLayout.ADDRESS,
+                        ValueLayout.JAVA_CHAR,
+                        ValueLayout.JAVA_CHAR,
+                        ValueLayout.JAVA_CHAR,
+                        ValueLayout.JAVA_CHAR,
+                        ValueLayout.JAVA_CHAR,
+                        ValueLayout.JAVA_CHAR,
+                        ValueLayout.JAVA_CHAR,
+                        ValueLayout.JAVA_CHAR
+                )
+        );
+
+        createBorder.invoke(windowPtr, ls, rs, ts, bs, tl, tr, bl, br);
 
         return this;
     }
@@ -58,7 +89,7 @@ record Window(Arena arena, MemorySegment windowPtr) {
                 )
         );
 
-        MemorySegment strSegment = arena.allocateUtf8String(str);
+        MemorySegment strSegment = arena.allocateFrom(str);
 
         printString.invoke(
                 windowPtr,

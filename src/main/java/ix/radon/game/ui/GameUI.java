@@ -21,6 +21,7 @@ public class GameUI {
             );
 
             startGame.invoke();
+            setTerminalSize();
             ScoreBoard.createBoards(arena);
 
             f.apply(board);
@@ -40,8 +41,8 @@ public class GameUI {
                         arena,
                         26,
                         3,
-                        (getTerminal().xSize() - 26) / 2,
-                        (getTerminal().ySize() - 3) / 2
+                        (Terminal.xSize - 26) / 2,
+                        (Terminal.ySize - 3) / 2
                 )
                 .makeDefaultBorder()
                 .print(1, 1, " Press any key to exit. ")
@@ -64,7 +65,7 @@ public class GameUI {
         }
     }
 
-    static Terminal getTerminal() throws RuntimeException {
+    private static void setTerminalSize() throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
             MethodHandle getTerminalDimension = ArtistLibrary.loadFunction(
                     arena,
@@ -90,7 +91,8 @@ public class GameUI {
                     2
             );
 
-            return new Terminal(dimension[0], dimension[1]);
+            Terminal.xSize = dimension[0];
+            Terminal.ySize = dimension[1];
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

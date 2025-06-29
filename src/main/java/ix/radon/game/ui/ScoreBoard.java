@@ -14,7 +14,7 @@ public class ScoreBoard {
         playerScoreWindow = Window
                 .create(
                         arena,
-                        GameUI.getTerminal().xSize() / 2,
+                        Terminal.xSize / 2,
                         3,
                         0,
                         0
@@ -26,9 +26,9 @@ public class ScoreBoard {
         computerScoreWindow = Window
                 .create(
                         arena,
-                        GameUI.getTerminal().xSize() / 2,
+                        Terminal.xSize / 2,
                         3,
-                        (GameUI.getTerminal().xSize() / 2) - 1,
+                        (Terminal.xSize / 2) - 1,
                         0
                 )
                 .makeDefaultBorder()

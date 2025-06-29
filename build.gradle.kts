@@ -11,11 +11,7 @@ repositories {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-
-    tasks.withType<JavaCompile>().configureEach {
-        options.compilerArgs.add("--enable-preview")
+        languageVersion = JavaLanguageVersion.of(22)
     }
 }
 
