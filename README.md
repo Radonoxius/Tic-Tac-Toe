@@ -3,10 +3,9 @@ A Tic-Tac-Toe game written in Java, Rust and C!
 
 
 ### Running the game
-First and foremost, you MUST have Linux! (and java v22 or higher)
+First and foremost, you MUST have Linux and Java v22+
 
-To Run the game, open a new terminal, `cd` into the parent folder (Tic-Tac-Toe) and type the following:
-
+To Run the game, open a new terminal, `cd` into the parent folder (Tic-Tac-Toe) and type the following: (Note: Ignore all of the warnings regarding unsafe functions)
 ```console
 ./run.sh
 ```
