@@ -1,18 +1,26 @@
 package ix.radon.game.ui;
 
+import ix.radon.game.logic.GameBoard;
+
 import java.lang.foreign.*;
 
 //Represents the game scoreboard
 public class ScoreBoard {
-    private static int playerScore = 0;
-    private static int computerScore = 0;
+    private int playerScore;
+    private int computerScore;
 
-    private static Window playerScoreWindow;
-    private static Window computerScoreWindow;
+    private final Window playerScoreWindow;
+    private final Window computerScoreWindow;
 
-    static void createBoards(Arena arena) throws Throwable {
-        playerScoreWindow = Window
-                .create(
+    private final GameBoard board;
+
+    ScoreBoard(Arena arena, GameBoard board) throws Throwable {
+        playerScore = 0;
+        computerScore = 0;
+
+        this.board = board;
+
+        playerScoreWindow = new Window(
                         arena,
                         Terminal.xSize / 2,
                         3,
@@ -20,11 +28,10 @@ public class ScoreBoard {
                         0
                 )
                 .makeDefaultBorder()
-                .print(3, 1, "Player Score: 0")
+                .print(3, 1, this.board.player.name + "'s Score: 0")
                 .refresh();
 
-        computerScoreWindow = Window
-                .create(
+        computerScoreWindow = new Window(
                         arena,
                         Terminal.xSize / 2,
                         3,
@@ -32,45 +39,53 @@ public class ScoreBoard {
                         0
                 )
                 .makeDefaultBorder()
-                .print(3, 1, "Computer Score: 0")
+                .print(3, 1, this.board.computer.name + "'s Score: 0")
                 .refresh();
     }
 
-    static void updatePlayerScoreWindow() throws Throwable {
+    void updatePlayerScoreWindow() throws Throwable {
         playerScoreWindow
-                .print(17, 1, String.valueOf(playerScore))
+                .print(
+                        board.player.name.length() + 13,
+                        1,
+                        String.valueOf(playerScore)
+                )
                 .refresh();
     }
 
     //Increases the 'playerScore' by 1 and updates the score on the terminal
-    public static void incrementPlayerScore() throws Throwable {
+    public void incrementPlayerScore() throws Throwable {
         playerScore += 1;
         updatePlayerScoreWindow();
     }
 
     //Provides the current score of the player
-    public static int getPlayerScore() {
+    public int getPlayerScore() {
         return playerScore;
     }
 
-    static void updateComputerScoreWindow() throws Throwable {
+    void updateComputerScoreWindow() throws Throwable {
         computerScoreWindow
-                .print(19, 1, String.valueOf(computerScore))
+                .print(
+                        board.computer.name.length() + 13,
+                        1,
+                        String.valueOf(computerScore)
+                )
                 .refresh();
     }
 
     //Increases the 'computerScore' by 1 and updates the score on the terminal
-    public static void incrementComputerScore() throws Throwable {
+    public void incrementComputerScore() throws Throwable {
         computerScore += 1;
         updateComputerScoreWindow();
     }
 
     //Provides the current score of the computer
-    public static int getComputerScore() {
+    public int getComputerScore() {
         return computerScore;
     }
 
-    static void deleteBoards() throws Throwable {
+    void deleteBoards() throws Throwable {
         playerScoreWindow.delete();
         computerScoreWindow.delete();
     }

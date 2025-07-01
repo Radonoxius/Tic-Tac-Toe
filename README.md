@@ -1,16 +1,17 @@
 # Tic-Tac-Toe
-A Tic-Tac-Toe game written in Java, Rust and C!
+A Tic-Tac-Toe game written in Java! (With Rust and C interop)
 
+### Warning
+You can't directly run this program in the IDE. You MUST follow the instructions provided in the below section.
+## Running the game
+First and foremost, you MUST have Linux and Java v22+ (version 22 or higher)
 
-### Running the game
-First and foremost, you MUST have Linux and Java v22+
+To Run the game, open a new terminal, `cd` into the parent folder (`Tic-Tac-Toe`) and type the following:
 
-To Run the game, open a new terminal, `cd` into the parent folder (Tic-Tac-Toe) and type the following: (Note: Ignore all of the warnings regarding unsafe functions)
+(Note: Ignore warnings regarding *Restricted methods*)
 ```console
 ./run.sh
 ```
 
-### Warning
-You can't directly run this program in the IDE. You MUST follow the instructions provided above.
-
-If you have `clang`, `rustc` and `cargo` installed, you can run `full.sh` instead of `run.sh`. Prefer `run.sh`.
+### Extras (Optional)
+If you have `clang`, `rustc` and `cargo` installed, you can run `full.sh` instead of `run.sh`.

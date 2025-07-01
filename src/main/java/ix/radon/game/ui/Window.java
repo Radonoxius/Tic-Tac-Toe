@@ -7,8 +7,14 @@ import java.lang.foreign.ValueLayout;
 import java.lang.invoke.MethodHandle;
 
 //Represents a game-UI window
-record Window(Arena arena, MemorySegment windowPtr) {
-    static Window create(
+class Window {
+    private final Arena arena;
+    private final MemorySegment windowPtr;
+
+    private final int xSize;
+    private final int ySize;
+
+    Window(
             Arena arena,
             int xSize,
             int ySize,
@@ -27,7 +33,10 @@ record Window(Arena arena, MemorySegment windowPtr) {
                 )
         );
 
-        return new Window(arena, (MemorySegment) createWindow.invoke(xSize, ySize, xStart, yStart));
+        this.arena = arena;
+        this.windowPtr = (MemorySegment) createWindow.invoke(xSize, ySize, xStart, yStart);
+        this.xSize = xSize;
+        this.ySize = ySize;
     }
 
     Window makeDefaultBorder() throws Throwable {
@@ -43,14 +52,14 @@ record Window(Arena arena, MemorySegment windowPtr) {
     }
 
     Window makeBorder(
-            char ls,
-            char rs,
-            char ts,
-            char bs,
-            char tl,
-            char tr,
-            char bl,
-            char br
+            char leftSide,
+            char rightSide,
+            char topSide,
+            char bottomSide,
+            char topLeftCorner,
+            char topRightCorner,
+            char bottomLeftCorner,
+            char bottomRightCorner
     ) throws Throwable {
         MethodHandle createBorder = WindowLibrary.loadFunction(
                 arena,
@@ -68,7 +77,17 @@ record Window(Arena arena, MemorySegment windowPtr) {
                 )
         );
 
-        createBorder.invoke(windowPtr, ls, rs, ts, bs, tl, tr, bl, br);
+        createBorder.invoke(
+                windowPtr,
+                leftSide,
+                rightSide,
+                topSide,
+                bottomSide,
+                topLeftCorner,
+                topRightCorner,
+                bottomLeftCorner,
+                bottomRightCorner
+        );
 
         return this;
     }
@@ -89,13 +108,28 @@ record Window(Arena arena, MemorySegment windowPtr) {
                 )
         );
 
-        MemorySegment strSegment = arena.allocateFrom(str);
+        MemorySegment strPtr = arena.allocateFrom(str);
 
         printString.invoke(
                 windowPtr,
                 xStart,
                 yStart,
-                strSegment
+                strPtr
+        );
+
+        return this;
+    }
+
+    Window printHorizontallyCentred(
+            int yStart,
+            String str
+    ) throws Throwable {
+        int xStart = (this.xSize / 2) - (str.length() / 2);
+
+        print(
+                xStart,
+                yStart,
+                str
         );
 
         return this;

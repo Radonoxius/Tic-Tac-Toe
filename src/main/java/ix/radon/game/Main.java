@@ -7,15 +7,18 @@ import ix.radon.game.ui.ScoreBoard;
 public class Main {
     public static void main(String[] args) {
         /* If you want to do anything before starting the game,
-         * write the code below. (Before calling GameBoard.init(f))
+         * write the code below. (Before calling GameBoard.init(playerName, playerSymbol, f))
          */
 
-        /* GameBoard.init(f) creates a GameBoard and
+        /* GameBoard.init(playerName, playerSymbol, f) creates a GameBoard, players and
          * provides it to you. This function will also start the Game UI
          *
          * Call this function ONLY ONCE in the entire program
          */
-        GameBoard.init(board /* 'board' is a GameBoard object */ -> {
+        GameBoard.init(
+                "TestName", //Player's Name
+                TileSymbol.O, //Symbol the player will use
+                board /* 'board' is a GameBoard object */ -> {
             //This is called a 'Lambda' btw
 
             /* DON'T USE 'System.out.print/ln' IN THIS BLOCK!
@@ -33,17 +36,17 @@ public class Main {
              * call that code in the 'try' block below
              */
             try {
-                board.setTileSymbol(0, 0, TileSymbol.X);
-                board.setTileSymbol(1, 1, TileSymbol.O);
+                board.setTileSymbol(0, 0, board.player.tileSymbol);
+                board.setTileSymbol(1, 1, board.computer.tileSymbol);
 
-                Thread.sleep(2000);
-                ScoreBoard.incrementPlayerScore();
+                Thread.sleep(500);
+                board.scoreBoard.incrementPlayerScore();
 
-                Thread.sleep(2000);
-                ScoreBoard.incrementComputerScore();
+                Thread.sleep(500);
+                board.scoreBoard.incrementComputerScore();
 
-                Thread.sleep(2000);
-                ScoreBoard.incrementPlayerScore();
+                Thread.sleep(500);
+                board.scoreBoard.incrementPlayerScore();
             }
 
             //Code below is for error handling. Just ignore it
