@@ -18,6 +18,40 @@ void print_string(WINDOW *w, int x_start, int y_start, char *str) {
     mvwprintw(w, y_start, x_start, "%s", str);
 }
 
+void attribute_on(WINDOW *w, int selector) {
+    if (selector == 0)
+        wattr_on(w, A_NORMAL, NULL);
+    else if (selector == 1)
+        wattr_on(w, A_STANDOUT, NULL);
+    else if (selector == 2)
+        wattr_on(w, A_DIM, NULL);
+    else if (selector == 3)
+        wattr_on(w, A_BOLD, NULL);
+    else if (selector == 4)
+        wattr_on(w, COLOR_PAIR(1), NULL);
+    else if (selector == 5)
+        wattr_on(w, COLOR_PAIR(2), NULL);
+    else if (selector == 6)
+        wattr_on(w, COLOR_PAIR(3), NULL);
+}
+
+void attribute_off(WINDOW *w, int selector) {
+    if (selector == 0)
+        wattr_off(w, A_NORMAL, NULL);
+    else if (selector == 1)
+        wattr_off(w, A_STANDOUT, NULL);
+    else if (selector == 2)
+        wattr_off(w, A_DIM, NULL);
+    else if (selector == 3)
+        wattr_off(w, A_BOLD, NULL);
+    else if (selector == 4)
+        wattr_off(w, COLOR_PAIR(1), NULL);
+    else if (selector == 5)
+        wattr_off(w, COLOR_PAIR(2), NULL);
+    else if (selector == 6)
+        wattr_off(w, COLOR_PAIR(3), NULL);
+}
+
 void window_refresh(WINDOW *w) {
     wrefresh(w);
 }

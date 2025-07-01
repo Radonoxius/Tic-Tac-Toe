@@ -5,6 +5,7 @@ import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.lang.invoke.MethodHandle;
+import java.util.function.Function;
 
 //Represents a game-UI window
 class Window {
@@ -46,7 +47,11 @@ class Window {
                 FunctionDescriptor.ofVoid(ValueLayout.ADDRESS)
         );
 
+        attributeOn(FontAttributes.BOLD);
+        attributeOn(FontAttributes.DIM);
         createBorder.invoke(windowPtr);
+        attributeOff(FontAttributes.DIM);
+        attributeOff(FontAttributes.BOLD);
 
         return this;
     }
@@ -133,6 +138,45 @@ class Window {
         );
 
         return this;
+    }
+
+    Window attributeOn(FontAttributes attribute) throws Throwable {
+        MethodHandle attributeOn = WindowLibrary.loadFunction(
+                arena,
+                "attribute_on",
+                FunctionDescriptor.ofVoid(ValueLayout.ADDRESS, ValueLayout.JAVA_INT)
+        );
+
+        attributeOn.invoke(windowPtr, attribute.toInt());
+
+        return this;
+    }
+
+    Window attributeOff(FontAttributes attribute) throws Throwable {
+        MethodHandle attributeOff = WindowLibrary.loadFunction(
+                arena,
+                "attribute_off",
+                FunctionDescriptor.ofVoid(ValueLayout.ADDRESS, ValueLayout.JAVA_INT)
+        );
+
+        attributeOff.invoke(windowPtr, attribute.toInt());
+
+        return this;
+    }
+
+    Window applyPrintAttributes(
+            Function<Window, Void> f,
+            FontAttributes... attrs
+    ) throws Throwable {
+        for (FontAttributes attr : attrs)
+            attributeOn(attr);
+
+        f.apply(this);
+
+        for (int i = attrs.length - 1; i > 0; i--)
+            attributeOff(attrs[i]);
+
+        return attributeOff(attrs[0]);
     }
 
     Window refresh() throws Throwable {

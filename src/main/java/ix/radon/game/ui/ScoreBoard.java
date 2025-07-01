@@ -28,7 +28,15 @@ public class ScoreBoard {
                         0
                 )
                 .makeDefaultBorder()
-                .print(3, 1, this.board.player.name + "'s Score: 0")
+                .attributeOn(FontAttributes.GREEN)
+                .print(3, 1, this.board.player.name + "'s")
+                .attributeOff(FontAttributes.GREEN)
+                .print(5 + this.board.player.name.length(), 1, " Score: ")
+                .attributeOn(FontAttributes.GREEN)
+                .attributeOn(FontAttributes.BOLD)
+                .print(13 + this.board.player.name.length(), 1, "0")
+                .attributeOff(FontAttributes.BOLD)
+                .attributeOff(FontAttributes.GREEN)
                 .refresh();
 
         computerScoreWindow = new Window(
@@ -39,17 +47,29 @@ public class ScoreBoard {
                         0
                 )
                 .makeDefaultBorder()
-                .print(3, 1, this.board.computer.name + "'s Score: 0")
+                .attributeOn(FontAttributes.RED)
+                .print(3, 1, this.board.computer.name + "'s")
+                .attributeOff(FontAttributes.RED)
+                .print(5 + this.board.computer.name.length(), 1, " Score: ")
+                .attributeOn(FontAttributes.RED)
+                .attributeOn(FontAttributes.BOLD)
+                .print(13 + this.board.computer.name.length(), 1, "0")
+                .attributeOff(FontAttributes.BOLD)
+                .attributeOff(FontAttributes.RED)
                 .refresh();
     }
 
     void updatePlayerScoreWindow() throws Throwable {
         playerScoreWindow
+                .attributeOn(FontAttributes.GREEN)
+                .attributeOn(FontAttributes.BOLD)
                 .print(
                         board.player.name.length() + 13,
                         1,
                         String.valueOf(playerScore)
                 )
+                .attributeOff(FontAttributes.BOLD)
+                .attributeOff(FontAttributes.GREEN)
                 .refresh();
     }
 
@@ -66,11 +86,15 @@ public class ScoreBoard {
 
     void updateComputerScoreWindow() throws Throwable {
         computerScoreWindow
+                .attributeOn(FontAttributes.RED)
+                .attributeOn(FontAttributes.BOLD)
                 .print(
                         board.computer.name.length() + 13,
                         1,
                         String.valueOf(computerScore)
                 )
+                .attributeOff(FontAttributes.BOLD)
+                .attributeOff(FontAttributes.RED)
                 .refresh();
     }
 

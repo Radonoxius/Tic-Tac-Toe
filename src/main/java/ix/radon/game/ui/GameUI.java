@@ -54,9 +54,23 @@ public class GameUI {
                     7,
                     (Terminal.xSize - xSize) / 2,
                     (Terminal.ySize - 7) / 2
-            )
+                    )
                     .makeDefaultBorder()
-                    .printHorizontallyCentred(1, "GAME OVER!")
+                    .applyPrintAttributes(
+                            window -> {
+                                try {
+                                    window.printHorizontallyCentred(
+                                            1,
+                                            "GAME OVER!"
+                                    );
+                                } catch (Throwable e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return null;
+                            },
+                            FontAttributes.BOLD,
+                            FontAttributes.RED
+                    )
                     .printHorizontallyCentred(
                             3,
                             board.computer.name + " won the match!"
@@ -77,9 +91,23 @@ public class GameUI {
                     7,
                     (Terminal.xSize - xSize) / 2,
                     (Terminal.ySize - 7) / 2
-            )
+                    )
                     .makeDefaultBorder()
-                    .printHorizontallyCentred(1, "GAME OVER!")
+                    .applyPrintAttributes(
+                            window -> {
+                                try {
+                                    window.printHorizontallyCentred(
+                                            1,
+                                            "GAME OVER!"
+                                    );
+                                } catch (Throwable e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return null;
+                            },
+                            FontAttributes.BOLD,
+                            FontAttributes.GREEN
+                    )
                     .printHorizontallyCentred(
                             3,
                             board.player.name + " won the match!"
@@ -97,7 +125,21 @@ public class GameUI {
                     (Terminal.ySize - 7) / 2
                     )
                     .makeDefaultBorder()
-                    .printHorizontallyCentred(1, "GAME OVER!")
+                    .applyPrintAttributes(
+                            window -> {
+                                try {
+                                    window.printHorizontallyCentred(
+                                            1,
+                                            "GAME OVER!"
+                                    );
+                                } catch (Throwable e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return null;
+                            },
+                            FontAttributes.BOLD,
+                            FontAttributes.YELLOW
+                    )
                     .printHorizontallyCentred(
                             3,
                             "Its a draw!"
