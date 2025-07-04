@@ -1,6 +1,7 @@
 package ix.radon.game.logic;
 
 import ix.radon.game.ui.GameUI;
+import ix.radon.game.ui.InputHandler;
 import ix.radon.game.ui.ScoreBoard;
 
 import java.security.InvalidParameterException;
@@ -36,6 +37,8 @@ public class GameBoard {
 
     //The current in-game score board
     public ScoreBoard scoreBoard;
+    //The current in-game user input handler
+    public InputHandler inputHandler;
 
     private GameBoard(
             String playerName,
@@ -67,6 +70,7 @@ public class GameBoard {
             Function<GameBoard, Void> f
     ) {
         //Starts the game UI directly
+        //Also initialises scoreBoard and inputHandler
         GameUI.Start(f, new GameBoard(playerName, playerSymbol));
     }
 

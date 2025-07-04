@@ -24,6 +24,7 @@ public class GameUI {
             setTerminalSize(arena);
 
             board.scoreBoard = new ScoreBoard(arena, board);
+            board.inputHandler = new InputHandler(arena);
 
             f.apply(board);
 
@@ -75,7 +76,9 @@ public class GameUI {
                             3,
                             board.computer.name + " won the match!"
                     )
+                    .attributeOn(FontAttributes.BOLD)
                     .printHorizontallyCentred(5, "Press any key to exit")
+                    .attributeOff(FontAttributes.BOLD)
                     .refresh()
                     .delete();
         }
@@ -112,7 +115,9 @@ public class GameUI {
                             3,
                             board.player.name + " won the match!"
                     )
+                    .attributeOn(FontAttributes.BOLD)
                     .printHorizontallyCentred(5, "Press any key to exit")
+                    .attributeOff(FontAttributes.BOLD)
                     .refresh()
                     .delete();
         }
@@ -142,9 +147,11 @@ public class GameUI {
                     )
                     .printHorizontallyCentred(
                             3,
-                            "Its a draw!"
+                            "Its a Draw!"
                     )
+                    .attributeOn(FontAttributes.BOLD)
                     .printHorizontallyCentred(5, "Press any key to exit")
+                    .attributeOff(FontAttributes.BOLD)
                     .refresh()
                     .delete();
     }

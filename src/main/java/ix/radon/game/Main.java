@@ -3,6 +3,8 @@ package ix.radon.game;
 import ix.radon.game.logic.GameBoard;
 import ix.radon.game.logic.TileSymbol;
 
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
         /* If you want to do anything before starting the game,
@@ -32,11 +34,10 @@ public class Main {
             /* All of your logic code should be within this below 'try' block
              *
              * Split your logic into separate classes (or packages) and
-             * call that code in the 'try' block below
+             * call that code inside the 'try' block below
              */
             try {
-                board.setTileSymbol(0, 0, board.player.tileSymbol);
-                board.setTileSymbol(1, 1, board.computer.tileSymbol);
+                board.inputHandler.getInput();
 
                 Thread.sleep(500);
                 board.scoreBoard.incrementPlayerScore();
