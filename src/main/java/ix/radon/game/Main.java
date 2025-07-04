@@ -3,8 +3,6 @@ package ix.radon.game;
 import ix.radon.game.logic.GameBoard;
 import ix.radon.game.logic.TileSymbol;
 
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
         /* If you want to do anything before starting the game,

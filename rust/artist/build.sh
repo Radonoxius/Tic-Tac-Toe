@@ -7,8 +7,8 @@ cd build
 
 echo '--- Compiling C and Rust ---'
 
-clang -O3 -c ../*.c
-ar rcs libhelper.a *.o
+clang -O3 -c ../init.c
+ar rcs libhelper.a init.o
 
 rm *.o
 
