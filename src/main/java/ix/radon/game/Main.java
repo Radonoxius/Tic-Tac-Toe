@@ -3,11 +3,18 @@ package ix.radon.game;
 import ix.radon.game.logic.GameBoard;
 import ix.radon.game.logic.TileSymbol;
 
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         /* If you want to do anything before starting the game,
          * write the code below. (Before calling GameBoard.init(playerName, playerSymbol, f))
          */
+        System.out.println("INSTRUCTIONS:\n");
+        System.out.println("Use ARROW keys to select the tiles.");
+        System.out.println("Use the ENTER key to confirm selection.\n");
+        System.out.println("Press any key to start the game!");
+        int _ = System.in.read();
 
         /* GameBoard.init(playerName, playerSymbol, f) creates a GameBoard, players and
          * provides it to you. This function will also start the Game UI
@@ -59,5 +66,7 @@ public class Main {
                     return null;
                 }
         );
+
+        System.out.println("Thanks for playing!");
     }
 }
