@@ -10,11 +10,6 @@ public class Main {
         /* If you want to do anything before starting the game,
          * write the code below. (Before calling GameBoard.init(playerName, playerSymbol, f))
          */
-        System.out.println("INSTRUCTIONS:\n");
-        System.out.println("Use ARROW keys to select the tiles.");
-        System.out.println("Use the ENTER key to confirm selection.\n");
-        System.out.println("Press any key to start the game!");
-        int _ = System.in.read();
 
         /* GameBoard.init(playerName, playerSymbol, f) creates a GameBoard, players and
          * provides it to you. This function will also start the Game UI
@@ -23,8 +18,8 @@ public class Main {
          */
         GameBoard.init(
                 "TestName", //Player's Name
-                TileSymbol.O, //Symbol the player will use
-                gameBoard /* 'gameBoard' is a GameBoard object */ -> {
+                TileSymbol.X, //Symbol the player will use
+                game /* 'game' is a GameBoard object */ -> {
                     //This is called a 'Lambda' btw
 
                     //DON'T call GameBoard.init(playerName, playerSymbol, f) again here!
@@ -34,8 +29,8 @@ public class Main {
                      * DO IT BEFORE CALLING GameBoard.init(playerName, playerSymbol, f)!
                      */
 
-                    /* This init function provides you a GameBoard object called 'gameBoard'
-                     * All the 9 tiles of this gameBoard have 'TileSymbol.BLANK' as its default symbol
+                    /* This init function provides you a GameBoard object called 'game'
+                     * All the 9 tiles of this game have 'TileSymbol.BLANK' as its default symbol
                      */
 
                     /* All of your logic code should be within this below 'try' block
@@ -44,16 +39,16 @@ public class Main {
                      * call that code inside the 'try' block below
                      */
                     try {
-                        gameBoard.getUserInput();
+                        game.getUserInput();
                         Thread.sleep(500);
 
-                        gameBoard.getUserInput();
+                        game.getUserInput();
 
                         Thread.sleep(500);
-                        gameBoard.incrementPlayerScore();
+                        game.incrementPlayerScore();
 
                         Thread.sleep(500);
-                        gameBoard.incrementComputerScore();
+                        game.incrementComputerScore();
                     }
 
                     //Code below is for error handling. Just ignore it
@@ -66,8 +61,5 @@ public class Main {
                     return null;
                 }
         );
-
-        System.in.close();
-        System.out.println("Thanks for playing!");
     }
 }

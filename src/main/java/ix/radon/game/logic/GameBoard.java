@@ -46,7 +46,7 @@ public class GameBoard {
         }
 
         if (playerSymbol == TileSymbol.BLANK) {
-            throw new InvalidParameterException();
+            throw new InvalidParameterException("Player's tileSymbol can't be BLANK!");
         }
 
         player = new Player(playerName, playerSymbol);
@@ -65,7 +65,7 @@ public class GameBoard {
             Function<GameBoard, Void> f
     ) {
         //Starts the game UI directly
-        //Also initialises scoreBoard and inputHandler
+        //Also initialises ScoreBoard, InputHandler and GameBoardUI
         GameUI.Start(f, new GameBoard(playerName, playerSymbol));
     }
 
@@ -75,9 +75,12 @@ public class GameBoard {
             int x,
             int y,
             TileSymbol symbol
-    ) throws IndexOutOfBoundsException {
+    ) throws RuntimeException {
         if (x > 2 || y > 2) {
             throw new IndexOutOfBoundsException();
+        }
+        if (symbol == TileSymbol.BLANK) {
+            throw new InvalidParameterException("TileSymbol can't be BLANK!");
         }
         tiles[x][y].setSymbol(symbol);
     }
@@ -94,10 +97,11 @@ public class GameBoard {
         return tiles[x][y].getSymbol();
     }
 
-    //Gets the input from the user as an array of length 2
-    //The array format is {x, y}
-    public int[] getUserInput() throws Throwable {
-        return InputHandler.getInput();
+    /* Gets the input from the user and
+     * sets the tileSymbol in the respective tile
+     */
+    public void getUserInput() throws Throwable {
+        InputHandler.getInput();
     }
 
     //Gets the current score of the player

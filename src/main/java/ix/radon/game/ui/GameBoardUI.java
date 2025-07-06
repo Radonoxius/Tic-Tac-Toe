@@ -105,6 +105,6 @@ public class GameBoardUI {
     static void deleteTiles() throws Throwable {
         for (int x = 0; x < 3; x++)
             for (int y = 0; y < 3; y++)
-                tiles[x][y].windowPtr.delete();
+                tiles[x][y].delete();
     }
 }

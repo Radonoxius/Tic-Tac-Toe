@@ -1,5 +1,7 @@
 package ix.radon.game.ui;
 
+import ix.radon.game.logic.GameBoard;
+
 import java.lang.foreign.Arena;
 import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.MemorySegment;
@@ -9,96 +11,101 @@ import java.lang.invoke.MethodHandle;
 public class InputHandler {
     private static Arena arena;
 
-    private static int[] currentCoordinates;
+    private static GameBoard board;
 
-    static void init(Arena arena) {
-        currentCoordinates = new int[] {0, 0};
+    private static int[] currentSelectedCoordinates;
+
+    static void init(Arena arena, GameBoard board) {
+        currentSelectedCoordinates = new int[] {0, 0};
         InputHandler.arena = arena;
+        InputHandler.board = board;
     }
 
-    public static int[] getInput() throws Throwable {
+    public static void getInput() throws Throwable {
         MethodHandle stdscrGetInput = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_get_input",
                 FunctionDescriptor.of(ValueLayout.JAVA_BYTE)
         );
 
-        int[] previousCachedCoordinates = currentCoordinates.clone();
+        int[] previousSelectedCoordinates = currentSelectedCoordinates.clone();
 
         printCurrentCoordinates();
-
-        highlightTile(currentCoordinates);
+        highlightTileAt(currentSelectedCoordinates);
 
         while (true) {
             int key = (int) stdscrGetInput.invoke();
 
-            if (key == 1 && currentCoordinates[1] != 0) {
-                currentCoordinates[1] -= 1;
+            if (key == 1 && currentSelectedCoordinates[1] != 0) {
+                currentSelectedCoordinates[1] -= 1;
                 printCurrentCoordinates();
                 if (
-                        previousCachedCoordinates[0] != currentCoordinates[0] ||
-                        previousCachedCoordinates[1] != currentCoordinates[1]
+                        previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
+                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
-                    clearTileHighlight(previousCachedCoordinates);
-                highlightTile(currentCoordinates);
+                    clearTileHighlightAt(previousSelectedCoordinates);
+                highlightTileAt(currentSelectedCoordinates);
             }
-            else if (key == 2 && currentCoordinates[1] != 2) {
-                currentCoordinates[1] += 1;
+            else if (key == 2 && currentSelectedCoordinates[1] != 2) {
+                currentSelectedCoordinates[1] += 1;
                 printCurrentCoordinates();
                 if (
-                        previousCachedCoordinates[0] != currentCoordinates[0] ||
-                        previousCachedCoordinates[1] != currentCoordinates[1]
+                        previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
+                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
-                    clearTileHighlight(previousCachedCoordinates);
-                highlightTile(currentCoordinates);
+                    clearTileHighlightAt(previousSelectedCoordinates);
+                highlightTileAt(currentSelectedCoordinates);
             }
-            else if (key == 3 && currentCoordinates[0] != 0) {
-                currentCoordinates[0] -= 1;
+            else if (key == 3 && currentSelectedCoordinates[0] != 0) {
+                currentSelectedCoordinates[0] -= 1;
                 printCurrentCoordinates();
                 if (
-                        previousCachedCoordinates[0] != currentCoordinates[0] ||
-                        previousCachedCoordinates[1] != currentCoordinates[1]
+                        previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
+                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
-                    clearTileHighlight(previousCachedCoordinates);
-                highlightTile(currentCoordinates);
+                    clearTileHighlightAt(previousSelectedCoordinates);
+                highlightTileAt(currentSelectedCoordinates);
             }
-            else if (key == 4 && currentCoordinates[0] != 2) {
-                currentCoordinates[0] += 1;
+            else if (key == 4 && currentSelectedCoordinates[0] != 2) {
+                currentSelectedCoordinates[0] += 1;
                 printCurrentCoordinates();
                 if (
-                        previousCachedCoordinates[0] != currentCoordinates[0] ||
-                        previousCachedCoordinates[1] != currentCoordinates[1]
+                        previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
+                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
-                    clearTileHighlight(previousCachedCoordinates);
-                highlightTile(currentCoordinates);
+                    clearTileHighlightAt(previousSelectedCoordinates);
+                highlightTileAt(currentSelectedCoordinates);
             }
             else if (
                     key == 0 &&
-                    !GameBoardUI.tiles[currentCoordinates[0]][currentCoordinates[1]].isOccupied
+                    !GameBoardUI.tiles[currentSelectedCoordinates[0]][currentSelectedCoordinates[1]].isOccupied
             ) {
                 clearCurrentCoordinates();
                 if (
-                        previousCachedCoordinates[0] != currentCoordinates[0] ||
-                        previousCachedCoordinates[1] != currentCoordinates[1]
+                        previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
+                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
-                    clearTileHighlight(previousCachedCoordinates);
-                clearTileHighlight(currentCoordinates);
+                    clearTileHighlightAt(previousSelectedCoordinates);
+                clearTileHighlightAt(currentSelectedCoordinates);
                 GameBoardUI
-                        .tiles[currentCoordinates[0]][currentCoordinates[1]]
+                        .tiles[currentSelectedCoordinates[0]][currentSelectedCoordinates[1]]
                         .isOccupied = true;
+                InputHandler.board.setTileSymbol(
+                        currentSelectedCoordinates[0],
+                        currentSelectedCoordinates[1],
+                        board.player.tileSymbol
+                );
                 break;
             }
 
-            previousCachedCoordinates = currentCoordinates.clone();
+            previousSelectedCoordinates = currentSelectedCoordinates.clone();
         }
-
-        return currentCoordinates;
     }
 
-    private static void highlightTile(int[] tileCoordinates) throws Throwable {
+    private static void highlightTileAt(int[] tileCoordinates) throws Throwable {
         String mask = "";
         for (int x = 0; x <= GameBoardUI.xCoordinateMax; x++)
-            mask = mask + ' ';
+            mask += ' ';
 
         for (int y = 0; y <= GameBoardUI.yCoordinateMax; y++)
             if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
@@ -109,7 +116,7 @@ public class InputHandler {
                         .refresh();
     }
 
-    private static void clearTileHighlight(int[] tileCoordinates) throws Throwable {
+    private static void clearTileHighlightAt(int[] tileCoordinates) throws Throwable {
         String mask = "";
         for (int x = 0; x <= GameBoardUI.xCoordinateMax; x++)
             mask += ' ';
@@ -167,7 +174,7 @@ public class InputHandler {
         );
 
         String content = "Currently Selected Tile: (" +
-                currentCoordinates[0] + ", " + currentCoordinates[1] +
+                currentSelectedCoordinates[0] + ", " + currentSelectedCoordinates[1] +
                 ") [ENTER to confirm]";
 
         MemorySegment strPtr = arena.allocateFrom(content);

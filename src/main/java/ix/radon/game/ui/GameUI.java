@@ -17,11 +17,17 @@ public class GameUI {
                     FunctionDescriptor.ofVoid()
             );
 
+            System.out.println("INSTRUCTIONS:\n");
+            System.out.println("Use ARROW keys to select the tiles.");
+            System.out.println("Use the ENTER key to confirm selection.\n");
+            System.out.println("Press any key to start the game!");
+            int _ = System.in.read();
+
             startGame.invoke();
             setTerminalSize(arena);
 
             ScoreBoard.init(arena, board);
-            InputHandler.init(arena);
+            InputHandler.init(arena, board);
             GameBoardUI.init(arena);
 
             f.apply(board);
@@ -33,6 +39,9 @@ public class GameUI {
             declareWinner(arena, board);
 
             End(arena);
+
+            System.in.close();
+            System.out.println("Thanks for playing!");
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
