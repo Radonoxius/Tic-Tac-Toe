@@ -11,14 +11,14 @@ import java.lang.invoke.MethodHandle;
 public class InputHandler {
     private static Arena arena;
 
-    private static GameBoard board;
+    private static GameBoard game;
 
     private static int[] currentSelectedCoordinates;
 
-    static void init(Arena arena, GameBoard board) {
+    static void init(Arena arena, GameBoard game) {
         currentSelectedCoordinates = new int[] {0, 0};
         InputHandler.arena = arena;
-        InputHandler.board = board;
+        InputHandler.game = game;
     }
 
     public static void getInput() throws Throwable {
@@ -101,10 +101,10 @@ public class InputHandler {
                 GameBoardUI
                         .tiles[currentSelectedCoordinates[0]][currentSelectedCoordinates[1]]
                         .isOccupied = true;
-                board.setTileSymbol(
+                game.setTileSymbol(
                         currentSelectedCoordinates[0],
                         currentSelectedCoordinates[1],
-                        board.player.tileSymbol
+                        game.player.tileSymbol
                 );
                 break;
             }

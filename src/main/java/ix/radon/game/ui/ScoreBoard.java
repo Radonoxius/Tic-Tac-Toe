@@ -11,10 +11,10 @@ public class ScoreBoard {
     private static Window playerScoreWindow;
     private static Window computerScoreWindow;
 
-    private static GameBoard board;
+    private static GameBoard game;
 
-    static void init(Arena arena, GameBoard board) throws Throwable {
-        ScoreBoard.board = board;
+    static void init(Arena arena, GameBoard game) throws Throwable {
+        ScoreBoard.game = game;
 
         playerScoreWindow = new Window(
                         arena,
@@ -25,12 +25,12 @@ public class ScoreBoard {
                 )
                 .makeDefaultBorder()
                 .attributeOn(FontAttributes.GREEN)
-                .print(3, 1, board.player.name + "'s")
+                .print(3, 1, game.player.name + "'s")
                 .attributeOff(FontAttributes.GREEN)
-                .print(5 + board.player.name.length(), 1, " Score: ")
+                .print(5 + game.player.name.length(), 1, " Score: ")
                 .attributeOn(FontAttributes.GREEN)
                 .attributeOn(FontAttributes.BOLD)
-                .print(13 + board.player.name.length(),
+                .print(13 + game.player.name.length(),
                         1,
                         String.valueOf(playerScore)
                 )
@@ -47,12 +47,12 @@ public class ScoreBoard {
                 )
                 .makeDefaultBorder()
                 .attributeOn(FontAttributes.RED)
-                .print(3, 1, board.computer.name + "'s")
+                .print(3, 1, game.computer.name + "'s")
                 .attributeOff(FontAttributes.RED)
-                .print(5 + board.computer.name.length(), 1, " Score: ")
+                .print(5 + game.computer.name.length(), 1, " Score: ")
                 .attributeOn(FontAttributes.RED)
                 .attributeOn(FontAttributes.BOLD)
-                .print(13 + board.computer.name.length(),
+                .print(13 + game.computer.name.length(),
                         1,
                         String.valueOf(computerScore)
                 )
@@ -66,7 +66,7 @@ public class ScoreBoard {
                 .attributeOn(FontAttributes.GREEN)
                 .attributeOn(FontAttributes.BOLD)
                 .print(
-                        board.player.name.length() + 13,
+                        game.player.name.length() + 13,
                         1,
                         String.valueOf(playerScore)
                 )
@@ -89,7 +89,7 @@ public class ScoreBoard {
                 .attributeOn(FontAttributes.RED)
                 .attributeOn(FontAttributes.BOLD)
                 .print(
-                        board.computer.name.length() + 13,
+                        game.computer.name.length() + 13,
                         1,
                         String.valueOf(computerScore)
                 )

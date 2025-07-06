@@ -8,7 +8,7 @@ import java.util.function.Function;
 public class GameUI {
     public static void Start(
             Function<GameBoard, Void> f,
-            GameBoard board
+            GameBoard game
     ) throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
             MethodHandle startGame = ArtistLibrary.loadFunction(
@@ -26,17 +26,17 @@ public class GameUI {
             startGame.invoke();
             setTerminalSize(arena);
 
-            ScoreBoard.init(arena, board);
-            InputHandler.init(arena, board);
+            ScoreBoard.init(arena, game);
+            InputHandler.init(arena, game);
             GameBoardUI.init(arena);
 
-            f.apply(board);
+            f.apply(game);
 
             ScoreBoard.deleteBoards();
             GameBoardUI.deleteTiles();
 
             Thread.sleep(500);
-            declareWinner(arena, board);
+            declareWinner(arena, game);
 
             End(arena);
 
@@ -49,13 +49,13 @@ public class GameUI {
 
     private static void declareWinner(
             Arena arena,
-            GameBoard board
+            GameBoard game
     ) throws Throwable {
         if (ScoreBoard.getComputerScore() > ScoreBoard.getPlayerScore()) {
             int xSize = 25;
 
-            if (board.computer.name.length() + 19 > 25)
-                xSize = board.computer.name.length() + 19;
+            if (game.computer.name.length() + 19 > 25)
+                xSize = game.computer.name.length() + 19;
 
             new Window(
                     arena,
@@ -82,7 +82,7 @@ public class GameUI {
                     )
                     .printHorizontallyCentred(
                             3,
-                            board.computer.name + " won the match!"
+                            game.computer.name + " won the match!"
                     )
                     .attributeOn(FontAttributes.BOLD)
                     .printHorizontallyCentred(5, "Press any key to exit")
@@ -93,8 +93,8 @@ public class GameUI {
         else if (ScoreBoard.getComputerScore() < ScoreBoard.getPlayerScore()) {
             int xSize = 25;
 
-            if (board.player.name.length() + 19 > 25)
-                xSize = board.player.name.length() + 19;
+            if (game.player.name.length() + 19 > 25)
+                xSize = game.player.name.length() + 19;
 
             new Window(
                     arena,
@@ -121,7 +121,7 @@ public class GameUI {
                     )
                     .printHorizontallyCentred(
                             3,
-                            board.player.name + " won the match!"
+                            game.player.name + " won the match!"
                     )
                     .attributeOn(FontAttributes.BOLD)
                     .printHorizontallyCentred(5, "Press any key to exit")
