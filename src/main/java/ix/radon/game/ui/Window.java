@@ -124,9 +124,13 @@ class Window {
         return this;
     }
 
-    Window printFor(int xStart, int lineCount, String str) throws Throwable {
+    Window printFor(
+            int xStart,
+            int lineCount,
+            String str
+    ) throws Throwable {
         for (int i = 0; i < lineCount; i++)
-            this.print(0, i, str);
+            this.print(xStart, i, str);
         return this.print(xStart, lineCount, str);
     }
 
