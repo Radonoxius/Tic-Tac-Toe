@@ -77,7 +77,7 @@ public class GameBoardUI {
                     '-',
                     ' ',
                     '-',
-                    '-'
+                    ' '
             );
 
         for (int x = 0; x < 2; x++)
@@ -88,7 +88,7 @@ public class GameBoardUI {
                     ' ',
                     '|',
                     ' ',
-                    '|'
+                    ' '
             );
 
         tiles[2][2] = new TileUI(

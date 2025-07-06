@@ -112,7 +112,7 @@ public class InputHandler {
     private static void clearTileHighlight(int[] tileCoordinates) throws Throwable {
         String mask = "";
         for (int x = 0; x <= GameBoardUI.xCoordinateMax; x++)
-            mask = mask + ' ';
+            mask += ' ';
 
         for (int y = 0; y <= GameBoardUI.yCoordinateMax; y++)
             if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
@@ -193,7 +193,9 @@ public class InputHandler {
                 )
         );
 
-        String mask = "                                                  ";
+        String mask = "";
+        for (int i = 0; i < 50; i++)
+            mask += ' ';
 
         MemorySegment strPtr = arena.allocateFrom(mask);
 
