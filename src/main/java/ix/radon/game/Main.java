@@ -3,10 +3,8 @@ package ix.radon.game;
 import ix.radon.game.logic.GameBoard;
 import ix.radon.game.logic.TileSymbol;
 
-import java.io.IOException;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         /* If you want to do anything before starting the game,
          * write the code below. (Before calling GameBoard.init(playerName, playerSymbol, f))
          */
