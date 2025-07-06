@@ -5,15 +5,12 @@ import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.util.function.Function;
 
-//Represents the Terminal UI of the game
 public class GameUI {
-    //Starts the game UI. Don't bother reading the code
     public static void Start(
             Function<GameBoard, Void> f,
             GameBoard board
     ) throws RuntimeException {
         try(Arena arena = Arena.ofConfined()) {
-            //Arena is basically a pool of memory on RAM
             MethodHandle startGame = ArtistLibrary.loadFunction(
                     arena,
                     "start_game",
@@ -23,12 +20,14 @@ public class GameUI {
             startGame.invoke();
             setTerminalSize(arena);
 
-            board.scoreBoard = new ScoreBoard(arena, board);
-            board.inputHandler = new InputHandler(arena);
+            ScoreBoard.init(arena, board);
+            InputHandler.init(arena);
+            GameBoardUI.init(arena);
 
             f.apply(board);
 
-            board.scoreBoard.deleteBoards();
+            ScoreBoard.deleteBoards();
+            GameBoardUI.deleteTiles();
 
             Thread.sleep(500);
             declareWinner(arena, board);
@@ -43,7 +42,7 @@ public class GameUI {
             Arena arena,
             GameBoard board
     ) throws Throwable {
-        if (board.scoreBoard.getComputerScore() > board.scoreBoard.getPlayerScore()) {
+        if (ScoreBoard.getComputerScore() > ScoreBoard.getPlayerScore()) {
             int xSize = 25;
 
             if (board.computer.name.length() + 19 > 25)
@@ -82,7 +81,7 @@ public class GameUI {
                     .refresh()
                     .delete();
         }
-        else if (board.scoreBoard.getComputerScore() < board.scoreBoard.getPlayerScore()) {
+        else if (ScoreBoard.getComputerScore() < ScoreBoard.getPlayerScore()) {
             int xSize = 25;
 
             if (board.player.name.length() + 19 > 25)

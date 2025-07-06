@@ -6,56 +6,122 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.lang.invoke.MethodHandle;
 
-//Handles input from the user
 public class InputHandler {
-    private final Arena arena;
+    private static Arena arena;
 
-    private final int[] CurrentCoordinates;
+    private static int[] currentCoordinates;
 
-    InputHandler(Arena arena) {
-        CurrentCoordinates = new int[] {0, 0};
-
-        this.arena = arena;
+    static void init(Arena arena) {
+        currentCoordinates = new int[] {0, 0};
+        InputHandler.arena = arena;
     }
 
-    //Returns the tile coordinates - {x, y} - selected by the user
-    public int[] getInput() throws Throwable {
+    public static int[] getInput() throws Throwable {
         MethodHandle stdscrGetInput = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_get_input",
                 FunctionDescriptor.of(ValueLayout.JAVA_BYTE)
         );
 
+        int[] previousCachedCoordinates = currentCoordinates.clone();
+
         printCurrentCoordinates();
+
+        highlightTile(currentCoordinates);
+
         while (true) {
             int key = (int) stdscrGetInput.invoke();
 
-            if (key == 1 && CurrentCoordinates[1] != 0) {
-                CurrentCoordinates[1] -= 1;
+            if (key == 1 && currentCoordinates[1] != 0) {
+                currentCoordinates[1] -= 1;
                 printCurrentCoordinates();
+                if (
+                        previousCachedCoordinates[0] != currentCoordinates[0] ||
+                        previousCachedCoordinates[1] != currentCoordinates[1]
+                )
+                    clearTileHighlight(previousCachedCoordinates);
+                highlightTile(currentCoordinates);
             }
-            else if (key == 2 && CurrentCoordinates[1] != 2) {
-                CurrentCoordinates[1] += 1;
+            else if (key == 2 && currentCoordinates[1] != 2) {
+                currentCoordinates[1] += 1;
                 printCurrentCoordinates();
+                if (
+                        previousCachedCoordinates[0] != currentCoordinates[0] ||
+                        previousCachedCoordinates[1] != currentCoordinates[1]
+                )
+                    clearTileHighlight(previousCachedCoordinates);
+                highlightTile(currentCoordinates);
             }
-            else if (key == 3 && CurrentCoordinates[0] != 0) {
-                CurrentCoordinates[0] -= 1;
+            else if (key == 3 && currentCoordinates[0] != 0) {
+                currentCoordinates[0] -= 1;
                 printCurrentCoordinates();
+                if (
+                        previousCachedCoordinates[0] != currentCoordinates[0] ||
+                        previousCachedCoordinates[1] != currentCoordinates[1]
+                )
+                    clearTileHighlight(previousCachedCoordinates);
+                highlightTile(currentCoordinates);
             }
-            else if (key == 4 && CurrentCoordinates[0] != 2) {
-                CurrentCoordinates[0] += 1;
+            else if (key == 4 && currentCoordinates[0] != 2) {
+                currentCoordinates[0] += 1;
                 printCurrentCoordinates();
+                if (
+                        previousCachedCoordinates[0] != currentCoordinates[0] ||
+                        previousCachedCoordinates[1] != currentCoordinates[1]
+                )
+                    clearTileHighlight(previousCachedCoordinates);
+                highlightTile(currentCoordinates);
             }
-            else if (key == 0) {
+            else if (
+                    key == 0 &&
+                    !GameBoardUI.tiles[currentCoordinates[0]][currentCoordinates[1]].isOccupied
+            ) {
                 clearCurrentCoordinates();
+                if (
+                        previousCachedCoordinates[0] != currentCoordinates[0] ||
+                        previousCachedCoordinates[1] != currentCoordinates[1]
+                )
+                    clearTileHighlight(previousCachedCoordinates);
+                clearTileHighlight(currentCoordinates);
+                GameBoardUI
+                        .tiles[currentCoordinates[0]][currentCoordinates[1]]
+                        .isOccupied = true;
                 break;
             }
+
+            previousCachedCoordinates = currentCoordinates.clone();
         }
 
-        return CurrentCoordinates;
+        return currentCoordinates;
     }
 
-    private void refresh() throws Throwable {
+    private static void highlightTile(int[] tileCoordinates) throws Throwable {
+        String mask = "";
+        for (int x = 0; x <= GameBoardUI.xCoordinateMax; x++)
+            mask = mask + ' ';
+
+        for (int y = 0; y <= GameBoardUI.yCoordinateMax; y++)
+            if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
+                GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
+                        .attributeOn(FontAttributes.STANDOUT)
+                        .print(0, y, mask)
+                        .attributeOff(FontAttributes.STANDOUT)
+                        .refresh();
+    }
+
+    private static void clearTileHighlight(int[] tileCoordinates) throws Throwable {
+        String mask = "";
+        for (int x = 0; x <= GameBoardUI.xCoordinateMax; x++)
+            mask = mask + ' ';
+
+        for (int y = 0; y <= GameBoardUI.yCoordinateMax; y++)
+            if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
+                GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
+                        .print(0, y, mask)
+                        .refresh();
+    }
+
+    private static void refresh() throws Throwable {
         MethodHandle stdscrRefresh = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_refresh",
@@ -65,7 +131,7 @@ public class InputHandler {
         stdscrRefresh.invoke();
     }
 
-    private void standoutAttributeOn() throws Throwable {
+    private static void standoutAttributeOn() throws Throwable {
         MethodHandle stdscrAttrOn = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_attr_on",
@@ -74,10 +140,10 @@ public class InputHandler {
                 )
         );
 
-        stdscrAttrOn.invoke(1);
+        stdscrAttrOn.invoke(FontAttributes.STANDOUT.toInt());
     }
 
-    private void standoutAttributeOff() throws Throwable {
+    private static void standoutAttributeOff() throws Throwable {
         MethodHandle stdscrAttrOff = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_attr_off",
@@ -86,10 +152,10 @@ public class InputHandler {
                 )
         );
 
-        stdscrAttrOff.invoke(1);
+        stdscrAttrOff.invoke(FontAttributes.STANDOUT.toInt());
     }
 
-    private void printCurrentCoordinates() throws Throwable {
+    private static void printCurrentCoordinates() throws Throwable {
         MethodHandle stdscrPrint = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_print",
@@ -101,7 +167,7 @@ public class InputHandler {
         );
 
         String content = "Currently Selected Tile: (" +
-                CurrentCoordinates[0] + ", " + CurrentCoordinates[1] +
+                currentCoordinates[0] + ", " + currentCoordinates[1] +
                 ") [ENTER to confirm]";
 
         MemorySegment strPtr = arena.allocateFrom(content);
@@ -116,7 +182,7 @@ public class InputHandler {
         refresh();
     }
 
-    private void clearCurrentCoordinates() throws Throwable {
+    private static void clearCurrentCoordinates() throws Throwable {
         MethodHandle stdscrPrint = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_print",

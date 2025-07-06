@@ -1,6 +1,5 @@
 package ix.radon.game.ui;
 
-//Represents the Text-Attributes of text in the Terminal
 enum FontAttributes {
     NORMAL,
     STANDOUT,

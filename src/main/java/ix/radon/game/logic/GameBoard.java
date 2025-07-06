@@ -33,12 +33,7 @@ public class GameBoard {
     }
 
     //Stores the 9 tiles as a 3x3 matrix
-    private final GameBoardTile[][] tiles = new GameBoardTile[3][3];
-
-    //The current in-game score board
-    public ScoreBoard scoreBoard;
-    //The current in-game user input handler
-    public InputHandler inputHandler;
+    private static final GameBoardTile[][] tiles = new GameBoardTile[3][3];
 
     private GameBoard(
             String playerName,
@@ -97,5 +92,31 @@ public class GameBoard {
             throw new IndexOutOfBoundsException();
         }
         return tiles[x][y].getSymbol();
+    }
+
+    //Gets the input from the user as an array of length 2
+    //The array format is {x, y}
+    public int[] getUserInput() throws Throwable {
+        return InputHandler.getInput();
+    }
+
+    //Gets the current score of the player
+    public int getPlayerScore() {
+        return ScoreBoard.getPlayerScore();
+    }
+
+    //Gets the current score of the computer
+    public int getComputerScore() {
+        return ScoreBoard.getComputerScore();
+    }
+
+    //Increases the player score by 1, and updates the UI
+    public void incrementPlayerScore() throws Throwable {
+        ScoreBoard.incrementPlayerScore();
+    }
+
+    //Increases the computer score by 1, and updates the UI
+    public void incrementComputerScore() throws Throwable {
+        ScoreBoard.incrementComputerScore();
     }
 }

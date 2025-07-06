@@ -7,7 +7,6 @@ import java.lang.foreign.ValueLayout;
 import java.lang.invoke.MethodHandle;
 import java.util.function.Function;
 
-//Represents a game-UI window
 class Window {
     private final Arena arena;
     private final MemorySegment windowPtr;
