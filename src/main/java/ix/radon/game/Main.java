@@ -67,6 +67,7 @@ public class Main {
                 }
         );
 
+        System.in.close();
         System.out.println("Thanks for playing!");
     }
 }
