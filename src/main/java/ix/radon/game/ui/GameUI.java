@@ -65,7 +65,7 @@ public class GameUI {
                     (Terminal.ySize - 7) / 2
                     )
                     .makeDefaultBorder()
-                    .applyPrintAttributes(
+                    .printWithAttributes(
                             window -> {
                                 try {
                                     window.printHorizontallyCentred(
@@ -104,7 +104,7 @@ public class GameUI {
                     (Terminal.ySize - 7) / 2
                     )
                     .makeDefaultBorder()
-                    .applyPrintAttributes(
+                    .printWithAttributes(
                             window -> {
                                 try {
                                     window.printHorizontallyCentred(
@@ -138,7 +138,7 @@ public class GameUI {
                     (Terminal.ySize - 7) / 2
                     )
                     .makeDefaultBorder()
-                    .applyPrintAttributes(
+                    .printWithAttributes(
                             window -> {
                                 try {
                                     window.printHorizontallyCentred(

@@ -39,41 +39,49 @@ public class InputHandler {
             if (key == 1 && currentSelectedCoordinates[1] != 0) {
                 currentSelectedCoordinates[1] -= 1;
                 printCurrentCoordinates();
+
                 if (
                         previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
-                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
+                                previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
                     clearTileHighlightAt(previousSelectedCoordinates);
+
                 highlightTileAt(currentSelectedCoordinates);
             }
             else if (key == 2 && currentSelectedCoordinates[1] != 2) {
                 currentSelectedCoordinates[1] += 1;
                 printCurrentCoordinates();
+
                 if (
                         previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
-                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
+                                previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
                     clearTileHighlightAt(previousSelectedCoordinates);
+
                 highlightTileAt(currentSelectedCoordinates);
             }
             else if (key == 3 && currentSelectedCoordinates[0] != 0) {
                 currentSelectedCoordinates[0] -= 1;
                 printCurrentCoordinates();
+
                 if (
                         previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
-                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
+                                previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
                     clearTileHighlightAt(previousSelectedCoordinates);
+
                 highlightTileAt(currentSelectedCoordinates);
             }
             else if (key == 4 && currentSelectedCoordinates[0] != 2) {
                 currentSelectedCoordinates[0] += 1;
                 printCurrentCoordinates();
+
                 if (
                         previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
-                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
+                                previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
                     clearTileHighlightAt(previousSelectedCoordinates);
+
                 highlightTileAt(currentSelectedCoordinates);
             }
             else if (
@@ -81,16 +89,19 @@ public class InputHandler {
                     !GameBoardUI.tiles[currentSelectedCoordinates[0]][currentSelectedCoordinates[1]].isOccupied
             ) {
                 clearCurrentCoordinates();
+
                 if (
                         previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
                         previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
                 )
                     clearTileHighlightAt(previousSelectedCoordinates);
+
                 clearTileHighlightAt(currentSelectedCoordinates);
+
                 GameBoardUI
                         .tiles[currentSelectedCoordinates[0]][currentSelectedCoordinates[1]]
                         .isOccupied = true;
-                InputHandler.board.setTileSymbol(
+                board.setTileSymbol(
                         currentSelectedCoordinates[0],
                         currentSelectedCoordinates[1],
                         board.player.tileSymbol
@@ -107,13 +118,12 @@ public class InputHandler {
         for (int x = 0; x <= GameBoardUI.xCoordinateMax; x++)
             mask += ' ';
 
-        for (int y = 0; y <= GameBoardUI.yCoordinateMax; y++)
-            if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
-                GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
-                        .attributeOn(FontAttributes.STANDOUT)
-                        .print(0, y, mask)
-                        .attributeOff(FontAttributes.STANDOUT)
-                        .refresh();
+        if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
+            GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
+                    .attributeOn(FontAttributes.STANDOUT)
+                    .printFor(0, GameBoardUI.yCoordinateMax, mask)
+                    .attributeOff(FontAttributes.STANDOUT)
+                    .refresh();
     }
 
     private static void clearTileHighlightAt(int[] tileCoordinates) throws Throwable {
@@ -121,11 +131,10 @@ public class InputHandler {
         for (int x = 0; x <= GameBoardUI.xCoordinateMax; x++)
             mask += ' ';
 
-        for (int y = 0; y <= GameBoardUI.yCoordinateMax; y++)
-            if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
-                GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
-                        .print(0, y, mask)
-                        .refresh();
+        if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
+            GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
+                    .printFor(0, GameBoardUI.yCoordinateMax, mask)
+                    .refresh();
     }
 
     private static void refresh() throws Throwable {

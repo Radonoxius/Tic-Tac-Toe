@@ -124,6 +124,12 @@ class Window {
         return this;
     }
 
+    Window printFor(int xStart, int lineCount, String str) throws Throwable {
+        for (int i = 0; i < lineCount; i++)
+            this.print(0, i, str);
+        return this.print(xStart, lineCount, str);
+    }
+
     Window printHorizontallyCentred(
             int yStart,
             String str
@@ -163,7 +169,7 @@ class Window {
         return this;
     }
 
-    Window applyPrintAttributes(
+    Window printWithAttributes(
             Function<Window, Void> f,
             FontAttributes... attrs
     ) throws Throwable {
