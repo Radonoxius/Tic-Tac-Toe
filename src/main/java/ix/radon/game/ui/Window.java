@@ -188,6 +188,57 @@ class Window {
         return attributeOff(attrs[0]);
     }
 
+    private int[] xLineEquartion(int y) {
+        int[] xCoordinates = new int[2];
+
+        xCoordinates[0] = 2 * y + 1;
+        xCoordinates[1] = 2 * (GameBoardUI.xCoordinateMax / 2 - y) + 1;
+
+        return xCoordinates;
+    }
+
+    Window printX(int lineCount) throws Throwable {
+        for (int i = 1; i < lineCount; i++)
+            this
+                    .print(xLineEquartion(i)[0] - 1, i, "\\")
+                    .print(xLineEquartion(i)[1] - 1, i, "/");
+        return this
+                .print(xLineEquartion(lineCount)[0] - 1, lineCount, "\\")
+                .print(xLineEquartion(lineCount)[1] - 1, lineCount, "/");
+    }
+
+    private int[] xSemiCircleEquartion(int y) {
+        //X = (x - 1)/2, x = 2y + 1 & x = 2(XMax - y) + 1, x = 2X - 1
+        //(X - XMax/2)2 + (y - XMax/2)2 (XMax / 2)2,
+        //X = root((XMax/2)2 - (y - XMax/2)2) + XMax/2
+        int[] xCoordinates = new int[2];
+        double x1, x2;
+
+        x1 = Math.sqrt(
+                (
+                        Math.pow((double) GameBoardUI.xCoordinateMax / 4.0, 2.0) -
+                        Math.pow(y - (double) GameBoardUI.xCoordinateMax / 4.0, 2.0)
+                )
+        ) + (double) GameBoardUI.xCoordinateMax / 4.0;
+
+        x2 = -x1 + (double) GameBoardUI.xCoordinateMax / 2.0;
+
+        xCoordinates[0] = (int) Math.round(2 * x1 - 1);
+        xCoordinates[1] = (int) Math.round(2 * x2 - 1);
+
+        return xCoordinates;
+    }
+
+    Window printO(int lineCount) throws Throwable {
+        for (int i = 0; i < lineCount; i++)
+            this
+                    .print(xSemiCircleEquartion(i)[0], i, "+")
+                    .print(xSemiCircleEquartion(i)[1] + 2, i, "+");
+        return this
+                .print(xSemiCircleEquartion(lineCount)[0] - 2, lineCount, "+")
+                .print(xSemiCircleEquartion(lineCount)[1] + 4, lineCount, "+");
+    }
+
     Window refresh() throws Throwable {
         MethodHandle windowRefresh = WindowLibrary.loadFunction(
                 arena,

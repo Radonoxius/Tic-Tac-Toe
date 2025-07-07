@@ -18,9 +18,10 @@ public class GameUI {
             );
 
             System.out.println("INSTRUCTIONS:\n");
+            System.out.println("Put the Terminal in FULL-SCREEN for a better experience!\n");
             System.out.println("Use ARROW keys to select the tiles.");
             System.out.println("Use the ENTER key to confirm selection.\n");
-            System.out.println("Press any key to start the game!");
+            System.out.println("Hit ENTER to start the game!");
             int _ = System.in.read();
 
             startGame.invoke();

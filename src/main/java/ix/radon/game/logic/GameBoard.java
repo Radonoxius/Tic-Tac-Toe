@@ -1,5 +1,6 @@
 package ix.radon.game.logic;
 
+import ix.radon.game.ui.Draw;
 import ix.radon.game.ui.GameUI;
 import ix.radon.game.ui.InputHandler;
 import ix.radon.game.ui.ScoreBoard;
@@ -69,20 +70,25 @@ public class GameBoard {
         GameUI.Start(f, new GameBoard(playerName, playerSymbol));
     }
 
-    //This function takes the matrix-index of the tile and sets its symbol
+    //This function takes input from the user and sets the symbol
+    public void setPlayerTileSymbol() throws Throwable {
+        int[] coordinates = getUserInput();
+
+        tiles[coordinates[0]][coordinates[1]].setSymbol(player.tileSymbol);
+        Draw.drawPlayerSymbol(coordinates[0], coordinates[1], this);
+    }
+
+    //This function takes the matrix-index of the tile and sets the symbol
     //Remember, both indices starts at 0 (max value is 2)
-    public void setTileSymbol(
+    public void setComputerTileSymbol(
             int x,
-            int y,
-            TileSymbol symbol
-    ) throws RuntimeException {
+            int y
+    ) throws Throwable {
         if (x > 2 || y > 2) {
             throw new IndexOutOfBoundsException();
         }
-        if (symbol == TileSymbol.BLANK) {
-            throw new InvalidParameterException("TileSymbol can't be BLANK!");
-        }
-        tiles[x][y].setSymbol(symbol);
+        tiles[x][y].setSymbol(computer.tileSymbol);
+        Draw.drawComputerSymbol(x, y, this);
     }
 
     //This function takes the matrix-index of the tile and gets the symbol that's currently stored
@@ -97,11 +103,8 @@ public class GameBoard {
         return tiles[x][y].getSymbol();
     }
 
-    /* Gets the input from the user and
-     * sets the tileSymbol in the respective tile
-     */
-    public void getUserInput() throws Throwable {
-        InputHandler.getInput();
+    private int[] getUserInput() throws Throwable {
+        return InputHandler.getInput();
     }
 
     //Gets the current score of the player

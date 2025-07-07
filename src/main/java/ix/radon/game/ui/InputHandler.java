@@ -21,7 +21,7 @@ public class InputHandler {
         InputHandler.game = game;
     }
 
-    public static void getInput() throws Throwable {
+    public static int[] getInput() throws Throwable {
         MethodHandle stdscrGetInput = ArtistLibrary.loadFunction(
                 arena,
                 "stdscr_get_input",
@@ -89,28 +89,18 @@ public class InputHandler {
                     !GameBoardUI.tiles[currentSelectedCoordinates[0]][currentSelectedCoordinates[1]].isOccupied
             ) {
                 clearCurrentCoordinates();
-
-                if (
-                        previousSelectedCoordinates[0] != currentSelectedCoordinates[0] ||
-                        previousSelectedCoordinates[1] != currentSelectedCoordinates[1]
-                )
-                    clearTileHighlightAt(previousSelectedCoordinates);
-
                 clearTileHighlightAt(currentSelectedCoordinates);
 
                 GameBoardUI
                         .tiles[currentSelectedCoordinates[0]][currentSelectedCoordinates[1]]
                         .isOccupied = true;
-                game.setTileSymbol(
-                        currentSelectedCoordinates[0],
-                        currentSelectedCoordinates[1],
-                        game.player.tileSymbol
-                );
                 break;
             }
 
             previousSelectedCoordinates = currentSelectedCoordinates.clone();
         }
+
+        return currentSelectedCoordinates;
     }
 
     private static void highlightTileAt(int[] tileCoordinates) throws Throwable {
@@ -119,7 +109,7 @@ public class InputHandler {
             mask += ' ';
 
         if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
-            GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
+            GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].tileWindow
                     .attributeOn(FontAttributes.STANDOUT)
                     .printFor(0, GameBoardUI.yCoordinateMax, mask)
                     .attributeOff(FontAttributes.STANDOUT)
@@ -132,7 +122,7 @@ public class InputHandler {
             mask += ' ';
 
         if (!GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].isOccupied)
-            GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].windowPtr
+            GameBoardUI.tiles[tileCoordinates[0]][tileCoordinates[1]].tileWindow
                     .printFor(0, GameBoardUI.yCoordinateMax, mask)
                     .refresh();
     }
@@ -182,15 +172,15 @@ public class InputHandler {
                 )
         );
 
-        String content = "Currently Selected Tile: (" +
+        String content = "Selected: (" +
                 currentSelectedCoordinates[0] + ", " + currentSelectedCoordinates[1] +
-                ") [ENTER to confirm]";
+                ")";
 
         MemorySegment strPtr = arena.allocateFrom(content);
 
         standoutAttributeOn();
         stdscrPrint.invoke(
-                Terminal.xSize - 50,
+                Terminal.xSize - 16,
                 Terminal.ySize - 1,
                 strPtr
         );
@@ -210,13 +200,13 @@ public class InputHandler {
         );
 
         String mask = "";
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 16; i++)
             mask += ' ';
 
         MemorySegment strPtr = arena.allocateFrom(mask);
 
         stdscrPrint.invoke(
-                Terminal.xSize - 50,
+                Terminal.xSize - 16,
                 Terminal.ySize - 1,
                 strPtr
         );

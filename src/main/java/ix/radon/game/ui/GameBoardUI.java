@@ -5,7 +5,7 @@ import java.lang.foreign.Arena;
 public class GameBoardUI {
     private static Arena arena;
 
-    private static final int Height = (Terminal.ySize - 6) / 3;
+    private static final int Height = (Terminal.ySize - 3) / 3;
     private static final int Width = Height * 2 + 1;
     private static final int yBoardOffset = 4;
 
@@ -13,7 +13,7 @@ public class GameBoardUI {
     static final int yCoordinateMax = Height - 2;
 
     static class TileUI {
-        final Window windowPtr;
+        final Window tileWindow;
         boolean isOccupied = false;
 
         TileUI(
@@ -25,7 +25,7 @@ public class GameBoardUI {
                 char bottomLeftCorner,
                 char bottomRightCorner
         ) throws Throwable {
-            windowPtr = new Window(
+            tileWindow = new Window(
                     arena,
                     Width,
                     Height,
@@ -48,7 +48,7 @@ public class GameBoardUI {
         }
 
         void delete() throws Throwable {
-            windowPtr.delete();
+            tileWindow.delete();
         }
     }
 

@@ -37,10 +37,12 @@ public class Main {
                      * call that code inside the 'try' block below
                      */
                     try {
-                        game.getUserInput();
+                        game.setComputerTileSymbol(2, 2);
+
+                        game.setPlayerTileSymbol();
                         Thread.sleep(500);
 
-                        game.getUserInput();
+                        game.setPlayerTileSymbol();
 
                         Thread.sleep(500);
                         game.incrementPlayerScore();
